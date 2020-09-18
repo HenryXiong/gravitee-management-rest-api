@@ -17,10 +17,12 @@ package io.gravitee.rest.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.gravitee.definition.model.DefinitionVersion;
 import io.gravitee.rest.api.model.annotations.ParameterKey;
 import io.gravitee.rest.api.model.parameters.Key;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Nicolas GERAUD (nicolas.geraud at graviteesource.com)
@@ -48,6 +50,7 @@ public class PortalConfigEntity {
     private Newsletter newsletter;
     private ReCaptcha reCaptcha;
     private Api api;
+    private Set<String> definitionVersions;
 
     public PortalConfigEntity() {
         company = new Company();
@@ -69,6 +72,7 @@ public class PortalConfigEntity {
         newsletter = new Newsletter();
         reCaptcha = new ReCaptcha();
         api = new Api();
+        definitionVersions = DefinitionVersion.versions();
     }
 
     public Company getCompany() {
@@ -221,6 +225,14 @@ public class PortalConfigEntity {
 
     public void setApi(Api api) {
         this.api = api;
+    }
+
+    public Set<String> getDefinitionVersions() {
+        return definitionVersions;
+    }
+
+    public void setDefinitionVersions(Set<String> definitionVersions) {
+        this.definitionVersions = definitionVersions;
     }
 
     public static class GoogleAuthentication {
