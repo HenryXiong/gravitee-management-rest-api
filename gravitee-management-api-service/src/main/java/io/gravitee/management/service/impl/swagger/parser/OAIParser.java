@@ -31,7 +31,7 @@ import java.io.IOException;
  * @author David BRASSELY (david.brassely at graviteesource.com)
  * @author GraviteeSource Team
  */
-public class OAIParser extends AbstractSwaggerParser<OpenAPI> {
+public class OAIParser extends AbstractSwaggerParser<SwaggerParseResult> {
 
     private final Logger logger = LoggerFactory.getLogger(OAIParser.class);
 
@@ -40,7 +40,7 @@ public class OAIParser extends AbstractSwaggerParser<OpenAPI> {
     }
 
     @Override
-    public OpenAPI parse(String content) {
+    public SwaggerParseResult parse(String content) {
         OpenAPIParser parser = new OpenAPIParser();
         SwaggerParseResult parseResult;
         String path = content;
@@ -52,13 +52,12 @@ public class OAIParser extends AbstractSwaggerParser<OpenAPI> {
 
         parseResult = parser.readLocation(path, null, null);
 
-        if (parseResult != null && parseResult.getOpenAPI() != null &&
-                (parseResult.getMessages() != null && !parseResult.getMessages().isEmpty())) {
-            throw new SwaggerDescriptorException(parseResult.getMessages());
+        if (parseResult == null || parseResult.getOpenAPI() == null) {
+            throw new SwaggerDescriptorException("Unable to import: Malformed descriptor");
         }
 
-        return (parseResult != null && parseResult.getOpenAPI() != null && parseResult.getOpenAPI().getInfo() != null)
-                ? parseResult.getOpenAPI() : null;
+        return (parseResult != null && (parseResult.getOpenAPI() != null || parseResult.getMessages() != null))
+                ? parseResult : null;
     }
 
 

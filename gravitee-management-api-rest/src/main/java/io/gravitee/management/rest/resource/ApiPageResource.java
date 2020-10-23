@@ -29,6 +29,7 @@ import io.gravitee.management.service.GroupService;
 import io.gravitee.management.service.PageService;
 import io.gravitee.management.service.exceptions.ForbiddenAccessException;
 import io.gravitee.management.service.exceptions.UnauthorizedAccessException;
+import io.gravitee.repository.management.model.PageType;
 import io.swagger.annotations.*;
 
 import javax.inject.Inject;
@@ -78,6 +79,9 @@ public class ApiPageResource extends AbstractResource {
                 }
             }
             if (isDisplayable(apiEntity, pageEntity.isPublished(), pageEntity.getExcludedGroups())) {
+                if (pageEntity.getContentType() != null) {
+                    pageEntity.setMessages(pageService.validateSafeContent(pageEntity.getContent(), PageType.valueOf(pageEntity.getType())));
+                }
                 return pageEntity;
             } else {
                 throw new UnauthorizedAccessException();

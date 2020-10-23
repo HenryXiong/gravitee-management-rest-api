@@ -29,6 +29,7 @@ import io.gravitee.management.service.spring.ImportConfiguration;
 import io.gravitee.management.service.swagger.OAIDescriptor;
 import io.gravitee.management.service.swagger.SwaggerDescriptor;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.parser.core.models.SwaggerParseResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,10 +92,12 @@ public class SwaggerServiceImpl implements SwaggerService {
             UrlSanitizerUtils.checkAllowed(content, importConfiguration.getImportWhitelist(), importConfiguration.isAllowImportFromPrivate());
         }
 
-        OpenAPI descriptor = new OAIParser().parse(content);
+        SwaggerParseResult parseResult = new OAIParser().parse(content);
 
-        if (descriptor != null) {
-            return new OAIDescriptor(descriptor);
+        if (parseResult != null && parseResult.getOpenAPI() != null) {
+            OAIDescriptor oaiDescriptor = new OAIDescriptor(parseResult.getOpenAPI());
+            oaiDescriptor.setMessages(parseResult.getMessages());
+            return oaiDescriptor;
         }
 
         throw new SwaggerDescriptorException();
