@@ -22,7 +22,6 @@ import io.gravitee.rest.api.service.GroupService;
 import io.gravitee.rest.api.service.Upgrader;
 import io.gravitee.rest.api.service.configuration.identity.IdentityProviderService;
 import io.gravitee.rest.api.service.impl.configuration.identity.IdentityProviderNotFoundException;
-import javassist.expr.NewArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
